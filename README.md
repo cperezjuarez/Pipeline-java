@@ -1,1 +1,1 @@
-# gestor-series-plataformas
+# gestor-series-plataformes
