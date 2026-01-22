@@ -270,3 +270,9 @@ gestor-series-plataformes/
         │           ├── gestor.service.ts
         │           └── gestor.service.spec.ts
 ```
+
+# pasos
+
+- mvn clean package
+- docker build -t app .
+- docker run -p 8080:8080 app
