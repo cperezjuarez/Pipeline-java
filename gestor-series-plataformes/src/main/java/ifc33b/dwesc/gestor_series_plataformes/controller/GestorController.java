@@ -52,5 +52,4 @@ public class GestorController {
         // HTTP Response
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
 }
