@@ -1,0 +1,11 @@
+services:
+  app:
+    image: tomcat:10.1-jdk21
+    container_name: gestor-series-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target/gestor-series-plataformes-0.0.1-SNAPSHOT.war:/usr/local/tomcat/webapps/ROOT.war
+    environment:
+      - JPDA_ADDRESS=8000
+      - JPDA_TRANSPORT=dt_socket
