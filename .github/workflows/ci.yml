@@ -46,9 +46,9 @@ jobs:
         run: mvn clean package -DskipTests
       
       # Construir imagen Docker
-      - name: Build Docker image
+      - name: Build and run Docker Compose
         working-directory: gestor-series-plataformes
-        run: docker build -t gestor-series-app:${{ github.sha }} .
+        run: docker-compose up --build -d
       
       # Subir resultados de tests
       - name: Upload test results
