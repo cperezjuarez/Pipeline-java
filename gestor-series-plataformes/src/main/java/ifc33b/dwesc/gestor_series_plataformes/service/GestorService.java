@@ -42,7 +42,7 @@ public class GestorService {
                 .orElseThrow(() -> new PlataformaNotFoundException(request.getPlataformaId()));
 
         Serie serie = new Serie(request.getTitol(), request.getGenere(), plataforma);
-        serieRepository.save(serie);
-        return new SerieResponse(serie);
+        Serie savedSerie = serieRepository.save(serie);
+        return new SerieResponse(savedSerie);
     }
 }
