@@ -91,6 +91,7 @@ class GestorServiceTest {
     @Test
     @DisplayName("getSeries - Should return list of series responses for valid platform id")
     void getSeries_ShouldReturnListOfSeriesResponsesForValidPlatformId() {
+        when(plataformaRepository.findById(1L)).thenReturn(Optional.of(plataforma1));
         List<Serie> series = Arrays.asList(serie1);
         when(serieRepository.getSeriesInPlataforma(1L)).thenReturn(series);
 
@@ -108,13 +109,14 @@ class GestorServiceTest {
     @Test
     @DisplayName("getSeries - Should return empty list when no series exist for platform")
     void getSeries_ShouldReturnEmptyListWhenNoSeriesExistForPlatform() {
-        when(serieRepository.getSeriesInPlataforma(999L)).thenReturn(Arrays.asList());
+        when(plataformaRepository.findById(1L)).thenReturn(Optional.of(plataforma1));
+        when(serieRepository.getSeriesInPlataforma(1L)).thenReturn(Arrays.asList());
 
-        List<SerieResponse> result = gestorService.getSeries(999L);
+        List<SerieResponse> result = gestorService.getSeries(1L);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(serieRepository, times(1)).getSeriesInPlataforma(999L);
+        verify(serieRepository, times(1)).getSeriesInPlataforma(1L);
     }
 
     @Test

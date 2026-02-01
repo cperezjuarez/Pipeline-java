@@ -31,6 +31,9 @@ public class GestorService {
 
     // Devuelve las series de una plataforma
     public List<SerieResponse> getSeries(Long id) {
+        Plataforma plataforma = plataformaRepository.findById(id)
+                .orElseThrow(() -> new PlataformaNotFoundException(id));
+                
         return serieRepository.getSeriesInPlataforma(id).stream()
                 .map(SerieResponse::new)
                 .collect(Collectors.toList());
