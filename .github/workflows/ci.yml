@@ -28,23 +28,31 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
         
     - name: Run Checkstyle
-      run: mvn checkstyle:check
+      run: |
+        cd gestor-series-plataformes
+        mvn checkstyle:check
       
     - name: Run unit tests
-      run: mvn test
+      run: |
+        cd gestor-series-plataformes
+        mvn test
         
     - name: Build application
-      run: mvn clean package -DskipTests
+      run: |
+        cd gestor-series-plataformes
+        mvn clean package -DskipTests
       
     - name: Build Docker image
-      run: docker build -t gestor-series-app:${{ github.sha }} .
+      run: |
+        cd gestor-series-plataformes
+        docker build -t gestor-series-app:${{ github.sha }} .
       
     - name: Upload test results
       uses: actions/upload-artifact@v3
       if: always()
       with:
         name: test-results
-        path: target/surefire-reports/
+        path: gestor-series-plataformes/target/surefire-reports/
 
   deploy:
     needs: test-and-build
@@ -57,6 +65,7 @@ jobs:
       
     - name: Deploy to staging
       run: |
+        cd gestor-series-plataformes
         echo "Deploying to staging environment..."
         # Add deployment commands here
         # For example: docker-compose up -d or kubectl apply -f k8s/
