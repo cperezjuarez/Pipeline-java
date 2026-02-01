@@ -48,7 +48,7 @@ jobs:
       # Construir imagen Docker
       - name: Build and run Docker Compose
         working-directory: gestor-series-plataformes
-        run: docker-compose up --build -d
+        run: docker compose up --build -d
       
       # Subir resultados de tests
       - name: Upload test results
