@@ -11,48 +11,52 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      # Checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v4
       
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
+      # Configurar JDK
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
         
-    - name: Cache Maven dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
+      # Cache de dependencias Maven
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
         
-    - name: Run Checkstyle
-      run: |
-        cd gestor-series-plataformes
-        mvn checkstyle:check
+      # Ejecutar Checkstyle
+      - name: Run Checkstyle
+        working-directory: gestor-series-plataformes
+        run: mvn checkstyle:check
       
-    - name: Run unit tests
-      run: |
-        cd gestor-series-plataformes
-        mvn test
+      # Ejecutar tests unitarios
+      - name: Run unit tests
+        working-directory: gestor-series-plataformes
+        run: mvn test
         
-    - name: Build application
-      run: |
-        cd gestor-series-plataformes
-        mvn clean package -DskipTests
+      # Construir aplicación sin tests
+      - name: Build application
+        working-directory: gestor-series-plataformes
+        run: mvn clean package -DskipTests
       
-    - name: Build Docker image
-      run: |
-        cd gestor-series-plataformes
-        docker build -t gestor-series-app:${{ github.sha }} .
+      # Construir imagen Docker
+      - name: Build Docker image
+        working-directory: gestor-series-plataformes
+        run: docker build -t gestor-series-app:${{ github.sha }} .
       
-    - name: Upload test results
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: test-results
-        path: gestor-series-plataformes/target/surefire-reports/
+      # Subir resultados de tests
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: gestor-series-plataformes/target/surefire-reports/
 
   deploy:
     needs: test-and-build
@@ -60,12 +64,14 @@ jobs:
     if: github.ref == 'refs/heads/main'
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      # Checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v4
       
-    - name: Deploy to staging
-      run: |
-        cd gestor-series-plataformes
-        echo "Deploying to staging environment..."
-        # Add deployment commands here
-        # For example: docker-compose up -d or kubectl apply -f k8s/
+      # Despliegue
+      - name: Deploy to staging
+        working-directory: gestor-series-plataformes
+        run: |
+          echo "Deploying to staging environment..."
+          # Aquí puedes añadir tus comandos de despliegue
+          # Ejemplo: docker-compose up -d o kubectl apply -f k8s/
