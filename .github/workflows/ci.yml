@@ -35,16 +35,6 @@ jobs:
         working-directory: gestor-series-plataformes
         run: mvn checkstyle:check
 
-      # Levantar PostgreSQL solo para tests
-      - name: Start PostgreSQL for tests
-        working-directory: gestor-series-plataformes
-        run: |
-          docker compose -f Docker-compose.yml up -d postgres-test
-          echo "Waiting for PostgreSQL test to be ready..."
-          until docker exec gestor-series-postgres-test pg_isready -U postgres; do
-            sleep 1
-          done
-
       # Ejecutar tests usando profile "test"
       - name: Run unit tests
         working-directory: gestor-series-plataformes
