@@ -61,8 +61,8 @@ jobs:
 
       # Construir imagen Docker
       - name: Build and run Docker Compose
-        working-directory: .
-        run: docker compose -f gestor-series-plataformes/docker-compose.yml up --build -d
+        working-directory: gestor-series-plataformes
+        run: docker compose up
 
       # Subir resultados de tests
       - name: Upload test results
