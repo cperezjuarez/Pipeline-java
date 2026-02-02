@@ -9,47 +9,55 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
-    
+
     steps:
       # Checkout del código
       - name: Checkout code
         uses: actions/checkout@v4
-      
-      # Configurar JDK
+
+      # Configurar JDK 21
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-        
-      # Cache de dependencias Maven
+
+      # Cache de dependencias de Maven
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-        
+
+      # Levantar PostgreSQL antes de los tests
+      - name: Start PostgreSQL
+        working-directory: gestor-series-plataformes
+        run: docker compose -f Docker-compose.yml up -d postgres
+
+      # Esperar a que PostgreSQL esté listo
+      - name: Wait for PostgreSQL
+        run: |
+          until docker exec gestor-series-postgres-test pg_isready -U test; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
       # Ejecutar Checkstyle
       - name: Run Checkstyle
         working-directory: gestor-series-plataformes
         run: mvn checkstyle:check
-      
-      # Ejecutar tests unitarios
-      - name: Run unit tests
+
+      # Ejecutar tests
+      - name: Run tests
         working-directory: gestor-series-plataformes
         run: mvn test
-        
+
       # Construir aplicación sin tests
       - name: Build application
         working-directory: gestor-series-plataformes
         run: mvn clean package -DskipTests
-      
-      # Construir imagen Docker
-      - name: Build and run Docker Compose
-        working-directory: gestor-series-plataformes
-        run: docker compose -f Docker-compose.yml up --build -d
-      
+
       # Subir resultados de tests
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -62,16 +70,14 @@ jobs:
     needs: test-and-build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
       # Checkout del código
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       # Despliegue
       - name: Deploy to staging
         working-directory: gestor-series-plataformes
         run: |
           echo "Deploying to staging environment..."
-          # Aquí puedes añadir tus comandos de despliegue
-          # Ejemplo: docker-compose up -d o kubectl apply -f k8s/
