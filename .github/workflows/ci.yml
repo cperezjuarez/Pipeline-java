@@ -10,6 +10,7 @@ jobs:
   test-and-build:
     runs-on: ubuntu-latest
     services:
+    # Levantar base de datos para los tests
       postgres:
         image: postgres:15
         env:
@@ -49,8 +50,8 @@ jobs:
         working-directory: gestor-series-plataformes
         run: mvn checkstyle:check
 
-      # Ejecutar tests unitarios
-      - name: Run unit tests
+      # Ejecutar tests
+      - name: Run tests
         working-directory: gestor-series-plataformes
         run: mvn test -Dspring.profiles.active=test
 
@@ -62,7 +63,7 @@ jobs:
       # Construir imagen Docker
       - name: Build and run Docker Compose
         working-directory: gestor-series-plataformes
-        run: docker compose up
+        run: docker compose -f Docker-Compose.yml up --build -d
 
       # Subir resultados de tests
       - name: Upload test results
@@ -87,5 +88,4 @@ jobs:
         working-directory: gestor-series-plataformes
         run: |
           echo "Deploying to staging environment..."
-          # Aquí puedes añadir tus comandos de despliegue
-          # Ejemplo: docker-compose up -d o kubectl apply -f k8s/
+          # Ejemplo de dónde iría el despliegue
