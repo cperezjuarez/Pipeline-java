@@ -1,3 +1,18 @@
+-- Crear tablas
+CREATE TABLE plataforma (
+    id BIGINT PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE serie (
+    id BIGSERIAL PRIMARY KEY,
+    titol VARCHAR(255) NOT NULL,
+    genere VARCHAR(100) NOT NULL,
+    plataforma_id BIGINT NOT NULL,
+    FOREIGN KEY (plataforma_id) REFERENCES plataforma (id)
+);
+
+-- Insertar datos
 INSERT INTO plataforma (id, nom) VALUES (1, 'Netflix');
 
 INSERT INTO plataforma (id, nom) VALUES (2, 'Disney+');
