@@ -37,8 +37,9 @@ jobs:
 
       # Esperar a que PostgreSQL esté listo
       - name: Wait for PostgreSQL
+        working-directory: gestor-series-plataformes
         run: |
-          until docker exec gestor-series-postgres-test pg_isready -U test; do
+          until docker exec gestor-series-db pg_isready -U postgres; do
             echo "Waiting for PostgreSQL..."
             sleep 2
           done
