@@ -9,20 +9,6 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:15
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_DB: gestor_series
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: root
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -41,23 +27,9 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Wait for Postgres
-        run: |
-          until pg_isready -h localhost -p 5432 -U postgres; do
-            echo "Waiting for Postgres..."
-            sleep 2
-          done
-
-      - name: Initialize database
-        run: |
-          PGPASSWORD=root psql -h localhost -U postgres -d gestor_series -f gestor-series-plataformes/src/main/resources/data-postgresql.sql
-
       - name: Run unit tests
         working-directory: gestor-series-plataformes
-        run: mvn test -Dspring.profiles.active=test \
-          -Dspring.datasource.url=jdbc:postgresql://localhost:5432/gestor_series \
-          -Dspring.datasource.username=postgres \
-          -Dspring.datasource.password=root
+        run: mvn test -Dspring.profiles.active=test
 
       - name: Build application
         working-directory: gestor-series-plataformes
