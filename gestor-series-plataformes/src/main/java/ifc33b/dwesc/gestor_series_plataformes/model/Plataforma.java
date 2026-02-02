@@ -20,7 +20,7 @@ import lombok.Data;
 public class Plataforma {
     // Atributos
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @NotBlank(message = "Se requiere un nombre para la plataforma")
@@ -31,7 +31,8 @@ public class Plataforma {
     private List<Serie> series = new ArrayList<>();
 
     // Constructores
-    public Plataforma() {}
+    public Plataforma() {
+    }
 
     public Plataforma(String nom) {
         this.setNom(nom);

@@ -1,278 +1,351 @@
-# Gestor de series y plataformas
+# Gestor de Series y Plataformas
 
-Aplicación que gestiona series y plataformas con backend en Spring Boot y frontend en Angular.
+Aplicación Spring Boot para gestionar series de streaming y sus plataformas, construida con Java 21, Maven, PostgreSQL y Docker.
 
-## Requisitos
+## 📋 Introducción y Estructura
 
-- Java 21
-- Maven
-- Node.js 18+ (para el frontend)
-- npm
-
-## Estructura de Carpetas
-
-### Backend (Spring Boot)
-- `back-end/gestor-series-plataformes/` - Aplicación Spring Boot
-  - `src/main/java/ifc33b/dwesc/gestor_series_plataformes/` - Código fuente Java
-    - `controller` - Controladores
-    - `dto` - Modelos de transferencia entre front y back
-    - `model` - Modelos Java
-    - `repository` - JPA
-    - `service` - Lógica de negocio
-    - `exception` - Control de excepciones
-  - `src/main/resources/` - Recursos de la aplicación
-  - `src/test/` - Tests unitarios
-  - `pom.xml` - Dependencias Maven
-
-### Frontend (Angular)
-- `front-end/gestor-series-plataformes/` - Aplicación Angular
-  - `src/app/` - Código Angular
-    - `components/` - Componentes reutilizables
-    - `models/` - Modelos TypeScript
-    - `services/` - Servicios (comunicación con backend)
-  - `src/` - Assets y configuración
-  - `package.json` - Dependencias npm
-
-## Instalación
-
-### Backend
-
-1. Acceder a la carpeta del backend:
-```bash
-cd back-end/gestor-series-plataformes
-```
-
-2. Compilar y ejecutar:
-```bash
-mvn spring-boot:run
-```
-
-El servidor estará disponible en `http://localhost:8080`
-
-### Frontend
-
-1. Acceder a la carpeta del frontend:
-```bash
-cd front-end/gestor-series-plataformes
-```
-
-2. Instalar dependencias:
-```bash
-npm install
-```
-
-3. Ejecutar servidor de desarrollo:
-```bash
-npm start
-```
-
-La aplicación estará disponible en `http://localhost:4200`
-
-## Desarrollo
-
-### Backend
-
-El backend está construido con:
-- **Spring Boot 3.x** - Framework web
-- **Spring Data JPA** - Acceso a datos
-- **Maven** - Gestor de dependencias
-
-### Frontend
-
-El frontend está construido con:
-- **Angular 18+** - Framework de desarrollo
-- **TypeScript** - Lenguaje de programación
-- **TailwindCSS** - Estilos
-- **npm** - Gestor de dependencias
-
-## Endpoints API
-
-La API está disponible en `http://localhost:8080/api`
-
-### Tabla Resumen de Endpoints
-
-| Método | Ruta | Descripción | Status |
-|--------|------|-------------|--------|
-| GET | `/api/plataformes` | Obtener todas las plataformas | 200 |
-| GET | `/api/series/plataforma/{id}` | Obtener las series de una plataforma | 200 |
-| POST | `/api/series` | Añadir una nueva serie a una plataforma | 201 |
-
-### Endpoints detallados
-
-#### 1. Obtener todas las plataformas
-
-**GET** `/api/plataformes`
-
-Devuelve la lista de plataformas.
-
-**Response (200 OK):**
-```json
-[
-  { "id": 1, "nom": "Netflix" },
-  { "id": 2, "nom": "Disney+" }
-]
-```
-
----
-
-#### 2. Obtener las series de una plataforma
-
-**GET** `/api/series/plataforma/{id}`
-
-Obtiene todas las series asociadas a la plataforma con el `id` proporcionado.
-
-**Response (200 OK):**
-```json
-[
-  { "id": 1, "titol": "Stranger Things", "genere": "Drama", "plataformaId": 1 },
-  { "id": 2, "titol": "Dark", "genere": "Ciencia ficción", "plataformaId": 1 }
-]
-```
-
----
-
-#### 3. Añadir una nueva serie a una plataforma
-
-**POST** `/api/series`
-
-Crea una nueva serie y la asocia a la plataforma indicada.
-
-**Headers:**
-```
-Content-Type: application/json
-```
-
-**Request Body:** (ejemplo)
-```json
-{
-  "titol": "Mi Serie",
-  "genere": "Comedia",
-  "plataformaId": 1
-}
-```
-
-**Parámetros requeridos:**
-- `titol` (string, obligatorio): Nombre de la serie, entre 3 y 25 caracteres
-- `genere` (string, obligatorio): Genero de la serie, entre 3 y 25 caracteres
-- `plataformaId` (int, obligatorio): ID de la plataforma a la que pertenece
-
-**Response (201 Created):**
-```json
-{
-  "id": 3,
-  "titol": "Mi Serie",
-  "genere": "Comedia",
-  "plataformaId": 1
-}
-```
-
----
-
-### Ejemplos con cURL
-
-Obtener plataformas:
-```bash
-curl -X GET "http://localhost:8080/api/plataformes"
-```
-
-Obtener series de la plataforma 1:
-```bash
-curl -X GET "http://localhost:8080/api/series/plataforma/1"
-```
-
-Crear una serie:
-```bash
-curl -v -X POST "http://localhost:8080/api/series" -H "Content-Type: application/json" --data-raw '{"titol":"Mi Serie","genere":"Comedia","plataformaId":1}'
-```
-
-## Estructura del Proyecto
+### Arquitectura del Proyecto
 
 ```
 gestor-series-plataformes/
-├── README.md
-├── back-end/
-│   └── gestor-series-plataformes/
-│       ├── mvnw
-│       ├── mvnw.cmd
-│       ├── pom.xml
-│       ├── src/
-│       │   ├── main/
-│       │   │   ├── java/ifc33b/dwesc/gestor-series-plataformes/
-│       │   │   │   ├── GestorSeriesPlataformesApplication.java
-│       │   │   │   ├── controller/
-│       │   │   │   │   └── GestorController.java
-│       │   │   │   ├── dto/
-│       │   │   │   │   ├── PlataformaResponse.java
-│       │   │   │   │   ├── SerieRequest.java
-│       │   │   │   │   └── SerieResponse.java
-│       │   │   │   ├── model/
-│       │   │   │   │   ├── Plataforma.java
-│       │   │   │   │   └── Serie.java
-│       │   │   │   ├── repository/
-│       │   │   │   │   ├──   PlataformaRepository.java
-│       │   │   │   │   └──   SerieRepository.java
-│       │   │   │   ├── service/
-│       │   │   │   │   └──  GestorService.java
-│       │   │   │   └── exception/
-│       │   │   │       ├── GlobalExceptionHandler.java
-│       │   │   │       └── PlataformaNotFoundException.java
-│       │   │   └── resources/
-│       │   │       ├── sql
-│       │   │       │   └── data.sql
-│       │   │       └── application.properties
-│       │   └── test/
-│       │       └── java/ifc33b/dwesc/ranking/
-│       │           └── GestorSeriesPlataformesApplicationTests.java
-│       └── target/ (generado por Maven)
-└── front-end/
-    └── gestor-series-plataformes/
-        ├── angular.json
-        ├── package.json
-        ├── tsconfig.json
-        ├── tsconfig.app.json
-        ├── tsconfig.spec.json
-        ├── README.md
-        ├── public/
-        ├── src/
-        │   ├── index.html
-        │   ├── main.ts
-        │   ├── styles.scss
-        │   └── app/
-        │       ├── app.config.ts
-        │       ├── app.html
-        │       ├── app.routes.ts
-        │       ├── app.scss
-        │       ├── app.ts
-        │       ├── app.spec.ts
-        │       ├── components/
-        │       │   ├── formulari-series/
-        │       │   │   ├── formulari-series.html
-        │       │   │   ├── formulari-series.scss
-        │       │   │   ├── formulari-series.ts
-        │       │   │   └── formulari-series.spec.ts
-        │       │   ├── llista-plataformes/
-        │       │   │   ├── llista-plataformes.html
-        │       │   │   ├── llista-plataformes.scss
-        │       │   │   ├── llista-plataformes.ts
-        │       │   │   └── llista-plataformes.spec.ts
-        │       │   └── llista-series/
-        │       │       ├── llista-series.html
-        │       │       ├── llista-series.scss
-        │       │       ├── llista-series.ts
-        │       │       └── llista-series.spec.ts
-        │       ├── models/
-        │       │   ├── index.ts
-        │       │   ├── serie.model.ts
-        │       │   ├── serie.model.spec.ts
-        │       │   ├── plataforma.model.ts
-        │       │   └── plataforma.model.spec.ts
-        │       └── services/
-        │           ├── gestor.service.ts
-        │           └── gestor.service.spec.ts
+├── src/
+│   ├── main/
+│   │   ├── java/ifc33b/dwesc/gestor_series_plataformes/
+│   │   │   ├── controller/          # Controladores REST
+│   │   │   ├── service/            # Lógica de negocio
+│   │   │   ├── repository/         # Acceso a datos (JPA)
+│   │   │   ├── model/              # Entidades JPA
+│   │   │   ├── dto/                # Objetos de transferencia
+│   │   │   └── GestorSeriesPlataformesApplication.java
+│   │   └── resources/
+│   │       ├── application.properties           # Configuración principal
+│   │       ├── application-test.properties     # Configuración tests
+│   │       ├── application-prod.properties     # Configuración producción
+│   │       └── data-postgresql.sql              # Datos iniciales
+│   └── test/                         # Tests unitarios e integración
+├── docker-compose.yml                # Configuración Docker
+├── checkstyle.xml                   # Reglas de estilo
+└── pom.xml                         # Dependencias Maven
 ```
 
-# pasos
+### Tecnologías Utilizadas
 
-- mvn clean package
-- docker build -t app .
-- docker run -p 8080:8080 app
+- **Backend:** Spring Boot 3.3.5, Java 21
+- **Base de Datos:** PostgreSQL 15
+- **Contenerización:** Docker & Docker Compose
+- **Tests:** JUnit 5, Mockito, TestContainers
+- **CI/CD:** GitHub Actions
+- **Calidad:** Checkstyle, Maven Surefire
+
+## 🚀 Puesta en Marcha
+
+### Prerrequisitos
+
+- Docker y Docker Compose
+- Java 21 JDK
+- Maven 3.8+
+
+### 1. Iniciar la Aplicación con Docker
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/cperezjuarez/Pipeline-java.git
+cd Pipeline-java/gestor-series-plataformes
+
+# Iniciar PostgreSQL y la aplicación
+docker compose up -d
+
+# Verificar que los contenedores estén corriendo
+docker ps
+```
+
+### 2. Cargar Datos de Prueba (Fixtures)
+
+Los datos se cargan automáticamente al iniciar PostgreSQL gracias al volumen configurado en `docker-compose.yml`:
+
+```yaml
+volumes:
+  - ./src/main/resources/data-postgresql.sql:/docker-entrypoint-initdb.d/init.sql
+```
+
+**Datos incluidos:**
+- 10 plataformas (Netflix, Disney+, HBO, etc.)
+- 25+ series distribuidas entre las plataformas
+
+### 3. Verificar la Aplicación
+
+```bash
+# Verificar logs de la aplicación
+docker logs gestor-series-app
+
+# Verificar conexión a la base de datos
+docker logs gestor-series-db
+```
+
+## 🧪 Ejecución de Tests
+
+### Tests Locales con PostgreSQL
+
+```bash
+# Iniciar PostgreSQL para tests
+docker compose up -d postgres-test
+
+# Ejecutar todos los tests
+mvn test -Dspring.profiles.active=test
+
+# Ejecutar solo tests unitarios
+mvn test -Dtest="*Test" -Dspring.profiles.active=test
+
+# Ejecutar solo tests de integración
+mvn test -Dtest="*IntegrationTest" -Dspring.profiles.active=test
+```
+
+### Verificar Resultados
+
+```bash
+# Ver reporte de tests
+cat target/surefire-reports/TEST-ifc33b.dwesc.gestor_series_plataformes.GestorSeriesPlataformesApplicationTests.xml
+
+# Ver cobertura de tests
+mvn jacoco:report
+open target/site/jacoco/index.html
+```
+
+## 🔍 Verificación del Funcionamiento
+
+### Endpoints Principales
+
+La aplicación expone los siguientes endpoints en `http://localhost:8080/api`:
+
+#### 1. Obtener Todas las Plataformas
+```bash
+curl -X GET http://localhost:8080/api/plataformes
+```
+
+**Respuesta esperada:**
+```json
+[
+  {"id": 1, "nom": "Netflix"},
+  {"id": 2, "nom": "Disney+"},
+  {"id": 3, "nom": "HBO"},
+  ...
+]
+```
+
+#### 2. Obtener Series por Plataforma
+```bash
+curl -X GET http://localhost:8080/api/series/plataforma/1
+```
+
+**Respuesta esperada:**
+```json
+[
+  {
+    "id": 1,
+    "titol": "Stranger Things",
+    "genere": "Ciencia ficción",
+    "plataforma_id": 1
+  },
+  {
+    "id": 2,
+    "titol": "The Crown",
+    "genere": "Drama",
+    "plataforma_id": 1
+  }
+]
+```
+
+#### 3. Crear Nueva Serie
+```bash
+curl -X POST http://localhost:8080/api/series \
+  -H "Content-Type: application/json" \
+  -d '{
+    "titol": "Nueva Serie",
+    "genere": "Drama",
+    "plataforma_id": 1
+  }'
+```
+
+### Colección Postman
+
+Se incluye una colección de Postman en `postman-collection.json` con todos los endpoints:
+
+```bash
+# Importar colección en Postman
+1. Abrir Postman
+2. File > Import
+3. Seleccionar el archivo postman-collection.json
+4. Ejecutar la colección "Gestor Series API"
+```
+
+**Variables de entorno en Postman:**
+- `baseUrl`: `http://localhost:8080/api`
+- `plataformaId`: `1`
+
+## 🧪 Suite de Tests
+
+### Tests Unitarios
+
+**GestorServiceTest.java**
+- `getPlataformes_ShouldReturnAllPlatforms`: Verifica obtención de todas las plataformas
+- `getSeries_ShouldReturnSeriesForPlatform`: Verifica filtrado de series por plataforma
+- `createSerie_ShouldCreateNewSeries`: Verifica creación de nuevas series
+- `createSerie_ShouldReturn404WhenPlatformDoesNotExist`: Manejo de plataforma inexistente
+
+**PlataformaRepositoryTest.java**
+- `findAll_ShouldReturnAllPlatforms`: Prueba de repositorio findAll
+- `findById_ShouldReturnPlatformWhenExists`: Prueba de búsqueda por ID
+- `save_ShouldCreateNewPlatform`: Prueba de guardado
+- `deleteById_ShouldDeletePlatform`: Prueba de eliminación
+
+**SerieRepositoryTest.java**
+- `findAll_ShouldReturnAllSeries`: Prueba de obtención de todas las series
+- `findById_ShouldReturnSeriesWhenExists`: Prueba de búsqueda por ID
+- `getSeriesInPlataforma_ShouldReturnSeriesForSpecificPlatform`: Prueba de filtrado
+- `save_ShouldCreateNewSeries`: Prueba de creación
+- `deleteById_ShouldDeleteSeries`: Prueba de eliminación
+
+### Tests de Integración
+
+**IntegrationTest.java**
+- `contextLoads`: Verifica carga del contexto Spring
+- `getPlataformas_ShouldReturnAllPlatforms`: Test completo del endpoint GET /plataformes
+- `getPlataformas_ShouldReturnEmptyListWhenNoPlatformsExist`: Manejo de lista vacía
+- `getSeriesByPlataforma_ShouldReturnSeriesForPlatform`: Test completo del endpoint GET /series/plataforma/{id}
+- `getSeriesByPlataforma_ShouldReturn404WhenPlatformDoesNotExist`: Manejo de 404
+- `createSerie_ShouldCreateNewSeries`: Test completo del endpoint POST /series
+- `createSerie_ShouldReturn400WhenValidationFails`: Manejo de validación
+- `completeFlow_ShouldWorkEndToEnd`: Flujo completo E2E
+
+**GestorSeriesPlataformesApplicationTests.java**
+- `contextLoads`: Verificación básica del contexto
+
+### Estadísticas de Tests
+
+- **Total de tests:** 42
+- **Tests unitarios:** 34
+- **Tests de integración:** 8
+- **Cobertura esperada:** >80%
+
+## 🔄 GitHub Actions Workflow
+
+### Archivo: `.github/workflows/ci.yml`
+
+#### Descripción del Pipeline
+
+**Trigger:**
+- Push a la rama `main`
+- Pull Requests a `main`
+
+**Jobs:**
+
+##### 1. test-and-build
+**Runner:** `ubuntu-latest`
+
+**Servicios:**
+- **PostgreSQL 15** con configuración:
+  - Base de datos: `gestor_series_test`
+  - Usuario: `postgres`
+  - Password: `root`
+  - Health checks para asegurar disponibilidad
+
+**Steps:**
+1. **Checkout code:** Descarga del código fuente
+2. **Set up JDK 21:** Configuración de Java 21 con Temurin
+3. **Cache Maven dependencies:** Caché de dependencias para acelerar builds
+4. **Run Checkstyle:** Verificación de estilo de código
+5. **Run unit tests:** Ejecución de tests con PostgreSQL (`-Dspring.profiles.active=test`)
+6. **Build application:** Compilación y empaquetado (`mvn clean package -DskipTests`)
+7. **Build and run Docker Compose:** Construcción y ejecución de contenedores
+8. **Upload test results:** Subida de resultados de tests como artefactos
+
+##### 2. deploy
+**Runner:** `ubuntu-latest`
+**Condición:** Solo en commits a `main`
+
+**Steps:**
+1. **Checkout code:** Descarga del código
+2. **Deploy to staging:** Despliegue a entorno de staging (placeholder para implementación real)
+
+#### Variables y Secretos
+
+**Variables de entorno configuradas:**
+- `POSTGRES_DB`: gestor_series_test
+- `POSTGRES_USER`: postgres
+- `POSTGRES_PASSWORD`: root
+
+**Artefactos generados:**
+- `test-results`: Reportes de tests en formato XML
+
+#### Optimizaciones
+
+- **Caché Maven:** Reduce tiempo de descarga de dependencias
+- **Health checks:** Asegura que PostgreSQL esté listo antes de los tests
+- **Paralelización:** Tests ejecutan en paralelo cuando es posible
+- **Build paralelo:** Build y deploy corren en jobs separados
+
+#### Tiempos Estimados
+
+- **Setup y cache:** 1-2 minutos
+- **Tests:** 2-3 minutos
+- **Build:** 1 minuto
+- **Docker:** 1-2 minutos
+- **Total:** 5-8 minutos
+
+## 🛠️ Comandos Útiles
+
+### Desarrollo
+```bash
+# Compilar sin tests
+mvn clean compile -DskipTests
+
+# Ejecutar aplicación local
+mvn spring-boot:run
+
+# Verificar estilo de código
+mvn checkstyle:check
+
+# Generar reporte de dependencias
+mvn dependency:tree
+```
+
+### Docker
+```bash
+# Reconstruir imágenes
+docker compose build
+
+# Ver logs en tiempo real
+docker compose logs -f
+
+# Limpiar contenedores y volúmenes
+docker compose down -v
+
+# Acceder a la base de datos
+docker exec -it gestor-series-db psql -U postgres -d gestor_series
+```
+
+## 📊 Monitorización y Logs
+
+### Logs de Aplicación
+```bash
+# Logs de Spring Boot
+docker logs gestor-series-app --tail 100
+
+# Logs de PostgreSQL
+docker logs gestor-series-db --tail 50
+```
+
+### Métricas de Salud
+```bash
+# Health check de la aplicación
+curl http://localhost:8080/actuator/health
+
+# Info de la aplicación
+curl http://localhost:8080/actuator/info
+```
+
+---
+
+**Autor:** Cristian Pérez Juárez 
+**Versión:** 1.0.0  
+**Última actualización:** Febrero 2026

@@ -19,14 +19,14 @@ import lombok.Data;
 public class Serie {
     // Atributos
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @NotBlank(message = "Se requiere un titulo para la serie")
     @Size(min = 3, max = 25, message = "El título debe de tener entre 3 y 25 caracteres")
     @Column(nullable = false)
     private String titol;
-    
+
     @NotBlank(message = "Se requiere un genero para la serie")
     @Size(min = 3, max = 25, message = "El genero debe de tener entre 3 y 25 caracteres")
     @Column(nullable = false)
@@ -38,7 +38,8 @@ public class Serie {
     private Plataforma plataforma;
 
     // Constructores
-    public Serie() {}
+    public Serie() {
+    }
 
     public Serie(String titol, String genere, Plataforma plataforma) {
         this.setTitol(titol);
