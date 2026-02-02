@@ -34,8 +34,24 @@ services:
     networks:
       - app-network
 
+  postgres-test:
+    image: postgres:15
+    container_name: gestor-series-db-test
+    environment:
+      - POSTGRES_DB=gestor_series_test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_test:/var/lib/postgresql/data
+      - ./src/main/resources/data-postgresql.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
 volumes:
   postgres_data:
+  postgres_data_test:
 
 networks:
   app-network:
