@@ -1,0 +1,67 @@
+# Archivos compilados y builds
+gestor-series-plataformes/target/
+gestor-series-plataformes/build/
+
+# Maven
+gestor-series-plataformes/pom.xml.tag
+gestor-series-plataformes/pom.xml.releaseBackup
+gestor-series-plataformes/pom.xml.versionsBackup
+gestor-series-plataformes/pom.xml.next
+gestor-series-plataformes/release.properties
+gestor-series-plataformes/dependency-reduced-pom.xml
+gestor-series-plataformes/buildNumber.properties
+gestor-series-plataformes/.mvn/timing.properties
+gestor-series-plataformes/.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+gestor-series-plataformes/.gradle
+gestor-series-plataformes/gradle-app.setting
+gestor-series-plataformes/!gradle-wrapper.jar
+gestor-series-plataformes/!gradlew
+gestor-series-plataformes/!gradlew.bat
+
+# Java compilados
+gestor-series-plataformes/*.class
+gestor-series-plataformes/*.jar
+gestor-series-plataformes/*.war
+gestor-series-plataformes/*.ear
+gestor-series-plataformes/*.nar
+
+# Logs y temporales
+gestor-series-plataformes/*.log
+gestor-series-plataformes/logs/
+gestor-series-plataformes/*.tmp
+gestor-series-plataformes/hs_err_pid*
+gestor-series-plataformes/replay_pid*
+
+# IDEs
+# VS Code
+.vscode/
+gestor-series-plataformes/.vscode/
+
+# IntelliJ
+.idea/
+.**.iml
+gestor-series-plataformes/.idea/
+gestor-series-plataformes/*.iml
+gestor-series-plataformes/*.ipr
+gestor-series-plataformes/*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+.factorypath
+gestor-series-plataformes/.classpath
+gestor-series-plataformes/.project
+gestor-series-plataformes/.classpath
+gestor-series-plataformes/.settings/
+gestor-series-plataformes/.factorypath
+
+# Spring Tool Suite
+gestor-series-plataformes/.springBeans
+gestor-series-plataformes/.sts4-cache
+
+# Otros
+gestor-series-plataformes/.DS_Store
+gestor-series-plataformes/Thumbs.db
