@@ -37,6 +37,8 @@ gestor-series-plataformes/
 - **CI/CD:** GitHub Actions
 - **Calidad:** Checkstyle, Maven Surefire
 
+---
+
 ## 🚀 Puesta en Marcha
 
 ### Prerrequisitos
@@ -51,6 +53,9 @@ gestor-series-plataformes/
 # Clonar el repositorio
 git clone https://github.com/cperezjuarez/Pipeline-java.git
 cd Pipeline-java/gestor-series-plataformes
+
+# Compilar el proyecto
+mvn clean package -DskipTests # Compilamos el proyecto sin ejecutar los tests porque necesitamos que PostgreSQL esté levantado y eso lo hacemos en el docker compose
 
 # Iniciar PostgreSQL y la aplicación
 docker compose up -d
@@ -82,34 +87,19 @@ docker logs gestor-series-app
 docker logs gestor-series-db
 ```
 
+---
+
 ## 🧪 Ejecución de Tests
 
 ### Tests Locales con PostgreSQL
 
-```bash
-# Iniciar PostgreSQL para tests
-docker compose up -d postgres-test
-
-# Ejecutar todos los tests
-mvn test -Dspring.profiles.active=test
-
-# Ejecutar solo tests unitarios
-mvn test -Dtest="*Test" -Dspring.profiles.active=test
-
-# Ejecutar solo tests de integración
-mvn test -Dtest="*IntegrationTest" -Dspring.profiles.active=test
-```
-
-### Verificar Resultados
+**Nota:** Los tests se ejecutan automáticamente en GitHub Actions, pero puedes ejecutarlos localmente iniciando el contendor de docker con Tomcat y PostgreSQL:
 
 ```bash
-# Ver reporte de tests
-cat target/surefire-reports/TEST-ifc33b.dwesc.gestor_series_plataformes.GestorSeriesPlataformesApplicationTests.xml
-
-# Ver cobertura de tests
-mvn jacoco:report
-open target/site/jacoco/index.html
+docker compose up -d
 ```
+
+---
 
 ## 🔍 Verificación del Funcionamiento
 
@@ -157,30 +147,22 @@ curl -X GET http://localhost:8080/api/series/plataforma/1
 
 #### 3. Crear Nueva Serie
 ```bash
-curl -X POST http://localhost:8080/api/series \
-  -H "Content-Type: application/json" \
-  -d '{
-    "titol": "Nueva Serie",
-    "genere": "Drama",
-    "plataforma_id": 1
-  }'
+curl -X POST http://localhost:8080/api/series -H "Content-Type: application/json" -d '{"titol": "Nueva Serie", "genere": "Drama", "plataformaId": 1}'
 ```
 
 ### Colección Postman
 
-Se incluye una colección de Postman en `postman-collection.json` con todos los endpoints:
+Se incluye una colección de Postman en `postman/gestor-series-plataformes.json` con todos los endpoints:
 
 ```bash
 # Importar colección en Postman
 1. Abrir Postman
 2. File > Import
-3. Seleccionar el archivo postman-collection.json
-4. Ejecutar la colección "Gestor Series API"
+3. Seleccionar el archivo gestor-series-plataformes.json
+4. Ejecutar la los endpoints
 ```
 
-**Variables de entorno en Postman:**
-- `baseUrl`: `http://localhost:8080/api`
-- `plataformaId`: `1`
+---
 
 ## 🧪 Suite de Tests
 
@@ -227,6 +209,8 @@ Se incluye una colección de Postman en `postman-collection.json` con todos los 
 - **Tests de integración:** 8
 - **Cobertura esperada:** >80%
 
+---
+
 ## 🔄 GitHub Actions Workflow
 
 ### Archivo: `.github/workflows/ci.yml`
@@ -265,84 +249,7 @@ Se incluye una colección de Postman en `postman-collection.json` con todos los 
 
 **Steps:**
 1. **Checkout code:** Descarga del código
-2. **Deploy to staging:** Despliegue a entorno de staging (placeholder para implementación real)
-
-#### Variables y Secretos
-
-**Variables de entorno configuradas:**
-- `POSTGRES_DB`: gestor_series_test
-- `POSTGRES_USER`: postgres
-- `POSTGRES_PASSWORD`: root
-
-**Artefactos generados:**
-- `test-results`: Reportes de tests en formato XML
-
-#### Optimizaciones
-
-- **Caché Maven:** Reduce tiempo de descarga de dependencias
-- **Health checks:** Asegura que PostgreSQL esté listo antes de los tests
-- **Paralelización:** Tests ejecutan en paralelo cuando es posible
-- **Build paralelo:** Build y deploy corren en jobs separados
-
-#### Tiempos Estimados
-
-- **Setup y cache:** 1-2 minutos
-- **Tests:** 2-3 minutos
-- **Build:** 1 minuto
-- **Docker:** 1-2 minutos
-- **Total:** 5-8 minutos
-
-## 🛠️ Comandos Útiles
-
-### Desarrollo
-```bash
-# Compilar sin tests
-mvn clean compile -DskipTests
-
-# Ejecutar aplicación local
-mvn spring-boot:run
-
-# Verificar estilo de código
-mvn checkstyle:check
-
-# Generar reporte de dependencias
-mvn dependency:tree
-```
-
-### Docker
-```bash
-# Reconstruir imágenes
-docker compose build
-
-# Ver logs en tiempo real
-docker compose logs -f
-
-# Limpiar contenedores y volúmenes
-docker compose down -v
-
-# Acceder a la base de datos
-docker exec -it gestor-series-db psql -U postgres -d gestor_series
-```
-
-## 📊 Monitorización y Logs
-
-### Logs de Aplicación
-```bash
-# Logs de Spring Boot
-docker logs gestor-series-app --tail 100
-
-# Logs de PostgreSQL
-docker logs gestor-series-db --tail 50
-```
-
-### Métricas de Salud
-```bash
-# Health check de la aplicación
-curl http://localhost:8080/actuator/health
-
-# Info de la aplicación
-curl http://localhost:8080/actuator/info
-```
+2. **Deploy:** Ejemplo de dónde habría que poner el deploy en un caso real
 
 ---
 

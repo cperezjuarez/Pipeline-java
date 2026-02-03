@@ -1,0 +1,83 @@
+{
+  "info": {
+    "_postman_id": "e2b08d6d-d34a-4130-9d7e-f3982df74ffe",
+    "name": "gestor-series-plataformes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GetPlataformes",
+      "id": "621ed66a-867a-42dd-842a-0d34142cf82d",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/plataformes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "plataformes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetSeries",
+      "id": "878827c4-32c3-4e10-bcb9-6ffa156ee1c5",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/series/plataforma/9",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "series",
+            "plataforma",
+            "9"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateSerie",
+      "id": "5f9f9bb4-2818-473d-ae77-127c0acdbf78",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"titol\": \"abc\",\r\n  \"genere\": \"abc\",\r\n  \"plataformaId\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/series",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "series"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
